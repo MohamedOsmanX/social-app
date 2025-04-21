@@ -37,38 +37,73 @@ export const AuthProvider = ({ children }) => {
   const login = async (emailOrUsername, password) => {
     try {
       setError('');
-      console.log('AuthContext: Sending login request...');
-      const res = await axios.post('/api/auth/login', { emailOrUsername, password });
-      const { token, user } = res.data;
+      console.log('AuthContext: Sending login request...', {emailOrUsername, password});
       
-      console.log('AuthContext: Login successful, setting token and user...');
-      localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      // Make sure we're sending the exact field names the backend expects
+      const res = await axios.post('/api/auth/login', { 
+        emailOrUsername, 
+        password 
+      });
       
-      setUser(user);
-      console.log('AuthContext: User state updated');
-      return { success: true };
+      console.log('AuthContext: Login response:', res.data);
+      
+      if (res.data && res.data.token) {
+        const { token, user } = res.data;
+        
+        console.log('AuthContext: Login successful, setting token and user...');
+        localStorage.setItem('token', token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        
+        setUser(user);
+        console.log('AuthContext: User state updated', user);
+        return { success: true };
+      } else {
+        console.error('AuthContext: Login response missing token or user data');
+        return { 
+          success: false, 
+          error: 'Invalid response from server' 
+        };
+      }
     } catch (err) {
       console.error('AuthContext: Login error:', err);
-      setError(err.response?.data?.message || 'Login failed');
-      return { success: false, error: err.response?.data?.message || 'Login failed' };
+      return { 
+        success: false, 
+        error: err.response?.data?.message || 'Login failed. Please check your credentials.' 
+      };
     }
   };
 
   const register = async (userData) => {
     try {
       setError('');
+      console.log('AuthContext: Sending registration request...', userData);
+      
       const res = await axios.post('/api/auth/register', userData);
-      const { token, user } = res.data;
+      console.log('AuthContext: Registration response:', res.data);
       
-      localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
-      setUser(user);
-      return { success: true };
+      if (res.data && res.data.token) {
+        const { token, user } = res.data;
+        
+        console.log('AuthContext: Registration successful, setting token and user...');
+        localStorage.setItem('token', token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        
+        setUser(user);
+        console.log('AuthContext: User state updated', user);
+        return { success: true };
+      } else {
+        console.error('AuthContext: Registration response missing token or user data');
+        return { 
+          success: false, 
+          error: 'Invalid response from server' 
+        };
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
-      return { success: false, error: err.response?.data?.message || 'Registration failed' };
+      console.error('AuthContext: Registration error:', err);
+      return { 
+        success: false, 
+        error: err.response?.data?.message || 'Registration failed. Please try again.' 
+      };
     }
   };
 

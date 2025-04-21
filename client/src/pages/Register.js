@@ -92,16 +92,30 @@ const Register = () => {
     setLoading(true);
     
     try {
+      console.log('Register: Attempting registration with data:', { 
+        username, 
+        email, 
+        password: '******' 
+      });
       const result = await register({ username, email, password });
+      console.log('Register: Registration result:', result);
       
       if (result.success) {
+        console.log('Register: Registration successful, navigating to homepage...');
         navigate('/');
+        
+        // If direct navigation doesn't work, try this after a short delay
+        setTimeout(() => {
+          console.log('Register: Attempting alternative navigation method...');
+          window.location.href = '/';
+        }, 1000);
       } else {
+        console.error('Register: Registration failed:', result.error);
         setError(result.error || 'Registration failed');
       }
     } catch (err) {
+      console.error('Register: Unexpected error during registration:', err);
       setError('Something went wrong. Please try again.');
-      console.error('Registration error:', err);
     } finally {
       setLoading(false);
     }

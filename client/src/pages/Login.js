@@ -56,26 +56,27 @@ const Login = () => {
         return;
       }
       
-      console.log('Attempting login...');
+      console.log('Login: Attempting login with credentials:', { emailOrUsername, password: '******' });
       const result = await login(emailOrUsername, password);
-      console.log('Login result:', result);
+      console.log('Login: Login result:', result);
       
       if (result.success) {
-        console.log('Login successful, navigating to homepage...');
+        console.log('Login: Login successful, navigating to homepage...');
         // Try direct navigation first
         navigate('/');
         
         // If direct navigation doesn't work, try this after a short delay
         setTimeout(() => {
-          console.log('Attempting alternative navigation method...');
+          console.log('Login: Attempting alternative navigation method...');
           window.location.href = '/';
         }, 1000);
       } else {
+        console.error('Login: Login failed:', result.error);
         setError(result.error || 'Login failed');
       }
     } catch (err) {
+      console.error('Login: Unexpected error during login:', err);
       setError('Something went wrong. Please try again.');
-      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
