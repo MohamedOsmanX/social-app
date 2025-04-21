@@ -62,21 +62,14 @@ const Login = () => {
       
       if (result.success) {
         console.log('Login: Login successful, navigating to homepage...');
-        // Try direct navigation first
         navigate('/');
-        
-        // If direct navigation doesn't work, try this after a short delay
-        setTimeout(() => {
-          console.log('Login: Attempting alternative navigation method...');
-          window.location.href = '/';
-        }, 1000);
       } else {
         console.error('Login: Login failed:', result.error);
-        setError(result.error || 'Login failed');
+        setError(result.error || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
       console.error('Login: Unexpected error during login:', err);
-      setError('Something went wrong. Please try again.');
+      setError('Something went wrong. Please check the console for more details.');
     } finally {
       setLoading(false);
     }

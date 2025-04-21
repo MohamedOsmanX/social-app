@@ -103,19 +103,13 @@ const Register = () => {
       if (result.success) {
         console.log('Register: Registration successful, navigating to homepage...');
         navigate('/');
-        
-        // If direct navigation doesn't work, try this after a short delay
-        setTimeout(() => {
-          console.log('Register: Attempting alternative navigation method...');
-          window.location.href = '/';
-        }, 1000);
       } else {
         console.error('Register: Registration failed:', result.error);
-        setError(result.error || 'Registration failed');
+        setError(result.error || 'Registration failed. Please try again.');
       }
     } catch (err) {
       console.error('Register: Unexpected error during registration:', err);
-      setError('Something went wrong. Please try again.');
+      setError('Something went wrong. Please check the console for more details.');
     } finally {
       setLoading(false);
     }
