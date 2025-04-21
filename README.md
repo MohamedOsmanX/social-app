@@ -18,7 +18,6 @@ A full-stack social media application built with Node.js, Express, and MongoDB.
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
 - **Authentication**: JWT
-- **File Storage**: (Specify if you're using any)
 - **Other**: bcrypt, mongoose
 
 ## Prerequisites
