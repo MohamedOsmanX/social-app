@@ -56,10 +56,20 @@ const Login = () => {
         return;
       }
       
+      console.log('Attempting login...');
       const result = await login(emailOrUsername, password);
+      console.log('Login result:', result);
       
       if (result.success) {
+        console.log('Login successful, navigating to homepage...');
+        // Try direct navigation first
         navigate('/');
+        
+        // If direct navigation doesn't work, try this after a short delay
+        setTimeout(() => {
+          console.log('Attempting alternative navigation method...');
+          window.location.href = '/';
+        }, 1000);
       } else {
         setError(result.error || 'Login failed');
       }

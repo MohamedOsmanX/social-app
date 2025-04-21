@@ -37,15 +37,19 @@ export const AuthProvider = ({ children }) => {
   const login = async (emailOrUsername, password) => {
     try {
       setError('');
+      console.log('AuthContext: Sending login request...');
       const res = await axios.post('/api/auth/login', { emailOrUsername, password });
       const { token, user } = res.data;
       
+      console.log('AuthContext: Login successful, setting token and user...');
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       setUser(user);
+      console.log('AuthContext: User state updated');
       return { success: true };
     } catch (err) {
+      console.error('AuthContext: Login error:', err);
       setError(err.response?.data?.message || 'Login failed');
       return { success: false, error: err.response?.data?.message || 'Login failed' };
     }

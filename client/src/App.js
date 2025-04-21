@@ -16,6 +16,7 @@ import Layout from './components/Layout';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
+  console.log('Protected Route - User state:', user ? 'Authenticated' : 'Not authenticated');
   if (!user) return <Navigate to="/login" />;
   return children;
 };
